@@ -1,0 +1,1 @@
+Simple noughts and crosses game, allowing 2 players to play in the same terminal.
