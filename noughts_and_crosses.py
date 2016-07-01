@@ -25,8 +25,14 @@ def make_move(grid, player):
     while True:
         playerprint = 2 if player == -1 else 1
         print("Player %s please make your move by typing 1-9:\n>" % playerprint, end="")
-        move = int(input())
-        if grid[move - 1] != 0:
+        try:
+            move = int(input())
+        except ValueError:
+            print("Invalid move")
+            continue
+        if not (0 < move <= 9):
+            print("Invalid move - out of range")
+        elif grid[move - 1] != 0:
             print("Invalid move, please play again")
         else:
             grid[move - 1] = player
