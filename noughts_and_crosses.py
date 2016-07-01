@@ -51,27 +51,24 @@ def play(grid):
 
 
 def check_hor(grid):
-    indices = [1, 4, 7]
-    for ix in indices:
-        if (grid[ix] != 0) and (grid[ix - 1] == grid[ix] == grid[ix + 1]):
+    for ix in [1, 4, 7]:
+        if abs(grid[ix - 1] + grid[ix] + grid[ix + 1]) == 3:
             return True
     return False
 
 
 def check_ver(grid):
-    indices = [3, 4, 5]
-    for ix in indices:
-        if (grid[ix] != 0) and (grid[ix - 3] == grid[ix] == grid[ix + 3]):
+    for ix in [3, 4, 5]:
+        if abs(grid[ix - 3] + grid[ix] + grid[ix + 3]) == 3:
             return True
     return False
 
 
 def check_diag(grid):
-    if grid[4] != 0:
-        if grid[0] == grid[4] == grid[8]:
-            return True
-        elif grid[2] == grid[4] == grid[6]:
-            return True
+    if abs(grid[0] + grid[4] + grid[8]) == 3:
+        return True
+    if abs(grid[2] + grid[4] + grid[6]) == 3:
+        return True
     return False
 
 
@@ -79,10 +76,7 @@ def check_win(grid):
     winhor = check_hor(grid)
     winver = check_ver(grid)
     windiag = check_diag(grid)
-    if winhor or winver or windiag:
-        return True
-    else:
-        return False
+    return winhor or winver or windiag
 
 
 def main():
