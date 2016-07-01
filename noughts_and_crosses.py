@@ -1,45 +1,43 @@
 
 def make_grid():
-    grid = ["."] * 9
+    grid = [0] * 9
     return grid
 
 
 def show_grid(grid):
+    symbols = {
+        0: ".",
+        1: "X",
+        -1: "0"
+    }
     for slot in grid[0:3]:
-        print(slot, " ", end="")
+        print(symbols[slot], " ", end="")
     print("\n")
     for slot in grid[3:6]:
-        print(slot, " ", end="")
+        print(symbols[slot], " ", end="")
     print("\n")
     for slot in grid[6:8]:
-        print(slot, " ", end="")
-    for slot in grid[8]:
-        print(slot)
+        print(symbols[slot], " ", end="")
+    print(symbols[slot])
 
 
 def make_move(grid, player):
     while True:
-        print("Player %s please make your move by typing 1-9:\n>" % player, end="")
+        playerprint = 2 if player == -1 else 1
+        print("Player %s please make your move by typing 1-9:\n>" % playerprint, end="")
         move = int(input())
-        symbols = {
-            1: "X",
-            2: "0"
-        }
-        if grid[move - 1] != ".":
+        if grid[move - 1] != 0:
             print("Invalid move, please play again")
         else:
-            grid[move - 1] = symbols[player]
+            grid[move - 1] = player
             return grid
 
 
 def play(grid):
     winner = False
-    cur_player = 2
+    cur_player = -1
     while not winner:
-        if cur_player == 1:
-            cur_player = 2
-        else:
-            cur_player = 1
+        cur_player *= -1
         newgrid = make_move(grid, cur_player)
         show_grid(newgrid)
         winner = check_win(newgrid)
@@ -49,7 +47,7 @@ def play(grid):
 def check_hor(grid):
     indices = [1, 4, 7]
     for ix in indices:
-        if (grid[ix] != ".") and (grid[ix - 1] == grid[ix] == grid[ix + 1]):
+        if (grid[ix] != 0) and (grid[ix - 1] == grid[ix] == grid[ix + 1]):
             return True
     return False
 
@@ -57,13 +55,13 @@ def check_hor(grid):
 def check_ver(grid):
     indices = [3, 4, 5]
     for ix in indices:
-        if (grid[ix] != ".") and (grid[ix - 3] == grid[ix] == grid[ix + 3]):
+        if (grid[ix] != 0) and (grid[ix - 3] == grid[ix] == grid[ix + 3]):
             return True
     return False
 
 
 def check_diag(grid):
-    if grid[4] != ".":
+    if grid[4] != 0:
         if grid[0] == grid[4] == grid[8]:
             return True
         elif grid[2] == grid[4] == grid[6]:
