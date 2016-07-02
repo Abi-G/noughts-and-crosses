@@ -18,7 +18,7 @@ def show_grid(grid):
     print("\n")
     for slot in grid[6:8]:
         print(symbols[slot], " ", end="")
-    print(symbols[slot])
+    print(symbols[grid[8]])
 
 
 def make_move(grid, player):
