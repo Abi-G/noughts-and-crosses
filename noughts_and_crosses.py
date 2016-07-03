@@ -54,11 +54,55 @@ def random_ai(grid, player):
     return grid
 
 
+def minimax(grid, player):
+    grid = grid[:]
+    branches = get_scores(grid, player, 0)
+    wins = []
+    draws = []
+    for (ix, val) in branches.items():
+        if val == player:
+            wins.append(ix)
+        if val == 0:
+            draws.append(ix)
+    if wins:
+        move = random.choice(wins)
+    elif draws:
+        move = random.choice(draws)
+    else:
+        move = random.choice(list(branches.keys()))
+    print("CPU move:", (move + 1))
+    grid[move] = player
+    return grid
+
+
+def get_scores(grid, player, depth):
+    scores = {}
+    for (ix, val) in enumerate(grid):
+        if val != 0:
+            continue
+        newgrid = grid[:]
+        newgrid[ix] = player
+        result = check_win(newgrid)
+        if result != 0:
+            if result == 2:
+                scores[ix] = 0
+            else:
+                scores[ix] = result
+        else:
+            scores[ix] = get_scores(newgrid, player * -1, depth + 1)
+    if depth == 0:
+        return scores
+    if player == 1:
+        return max(scores.values())
+    else:
+        return min(scores.values())
+
+
 def play(grid, tpg):
     cur_player = 1
     while True:
         if cur_player == -1 and not tpg:
-            grid = random_ai(grid, cur_player)
+            grid = minimax(grid, cur_player)
         else:
             grid = make_move(grid, cur_player)
         show_grid(grid)
