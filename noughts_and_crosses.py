@@ -1,4 +1,5 @@
 import random
+import sys
 
 
 def make_grid():
@@ -23,7 +24,7 @@ def show_grid(grid):
     print(symbols[grid[8]])
 
 
-def make_move(grid, player):
+def user_move(grid, player):
     grid = grid[:]   # copy grid
     while True:
         playerprint = 2 if player == -1 else 1
@@ -98,13 +99,13 @@ def get_scores(grid, player, depth):
         return min(scores.values())
 
 
-def play(grid, tpg):
+def play(grid, p1func, p2func):
     cur_player = 1
     while True:
-        if cur_player == -1 and not tpg:
-            grid = minimax(grid, cur_player)
+        if cur_player == 1:
+            grid = p1func(grid, cur_player)
         else:
-            grid = make_move(grid, cur_player)
+            grid = p2func(grid, cur_player)
         show_grid(grid)
         result = check_win(grid)
         if result != 0:
@@ -151,10 +152,34 @@ def check_win(grid):
     return 0
 
 
+def choose_players():
+    nargs = len(sys.argv)
+    if nargs == 1:
+        return (user_move, minimax)
+    if nargs == 3:
+        pl_options = {
+            "user": user_move,
+            "random": random_ai,
+            "minimax": minimax
+        }
+        try:
+            p1func = pl_options[sys.argv[1]]
+            p2func = pl_options[sys.argv[2]]
+        except KeyError:
+            print("\nPlease select player 1 and player 2 options from the following:")
+            print(list(pl_options.keys()))
+            sys.exit(1)
+        return (p1func, p2func)
+    else:
+        print("\nPlease either enter options for both players, or leave the player options blank\n")
+        sys.exit(1)
+
+
 def main():
+    p1func, p2func = choose_players()
     grid = make_grid()
     show_grid(grid)
-    play(grid, False)
+    play(grid, p1func, p2func)
 
 
 if __name__ == "__main__":
